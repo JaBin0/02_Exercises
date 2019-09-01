@@ -1,0 +1,195 @@
+//   for (int i = 1; i <= base; i++) {
+//     squaredVec.push_back(i * i);
+//   }
+  
+//   // Find complementary numbers
+//   std::unordered_map<int, Number> cmpMap;
+//   for(int idx = 1; idx <= n; ++idx) {
+//     cmpMap[idx].value = idx;
+//   }
+  
+//   // Number which start the series, by default it is 1 and during search it
+//   // should be set to number which has only one complementary value if such exist,
+//   // otherwise default stay unchange.
+//   int currentNum = 1;
+//   // Initial value of the number of numbers which can have only one complementary
+//   int numberWithOneComp = 2;
+  
+//   for (int idx = 1; idx <= n; ++idx) {
+//     // Amount of complementary number finded for the num
+//     int cmpCount = 0;
+//     Number& num = cmpMap[idx];
+    
+//     for(auto squared : squaredVec) {
+//       int cmpNum = squared - num.value;
+//       if(cmpNum > 0 && cmpNum <= n && cmpNum != num.value) {
+//         cmpCount++;
+//         num.cmpVec.push_back(cmpNum);
+//       }
+//     }
+
+//    // std::cout << "Size: " << currentNum  << " : "<< cmpMap[currentNum].cmpVec.size() << std::endl;
+//     //if(num.value != 1 &&  cmpMap[currentNum].cmpVec.size() < cmpCount) {
+//     //  currentNum = num.value;
+//     //}
+//     // Check if only one complementary 
+//     currentNum = num.value;
+//     std::cout << currentNum << " " << std::endl;
+//     if(cmpCount < 2 ) {
+//       currentNum = num.value;
+//       if(--numberWithOneComp < 0) {
+//         std::cout << "Series for " << n << ", more then two numbers have only" 
+//                 << "one complementary number" << std::endl;
+//         return {};
+//       }
+//     }
+//     else if(cmpCount == 2) {
+//       Number& firstCmp = cmpMap[num.cmpVec.at(0)];
+//       Number& secondCmp = cmpMap[num.cmpVec.at(1)];
+//       bool firstUsed = false;
+//       bool secondUsed = false;
+      
+//       if(num.left == nullptr) {
+//         if(firstCmp.right == nullptr) {
+//           num.left = &firstCmp;
+//           firstCmp.right = &num;
+//           firstUsed = true;
+//         }
+//         else if(secondCmp.right == nullptr) {
+//           num.left = &secondCmp;
+//           secondCmp.right = &num;
+//           secondUsed = true;
+//         }
+//         else {
+//           std::cout << "Assert - M0" << std::endl;
+//         }
+//       }
+      
+//       if(num.right == nullptr) {
+//         if(firstCmp.left == nullptr && !firstUsed ) {
+//           num.right = &firstCmp;
+//           firstCmp.left = &num;
+//         }
+//         else if(secondCmp.left == nullptr && !secondUsed) {
+//           num.right = &secondCmp;
+//           secondCmp.left = &num;
+//         }
+//         else {
+//           std::cout << "Assert - M1" << std::endl;
+//         }
+//       }
+    
+//       //std::cout << num.left->value << " << " << num.value << " >> " << num.right->value << std::endl;
+//     }
+//   }
+   
+// //   std::cout << std::endl;
+// //   std::cout << "==========================" << std::endl;
+// //   std::cout << std::endl;
+  
+//   // Show complementary
+// //   for(auto elem : cmpMap) {
+// //     std::cout << "[" <<elem.first << "]: ";
+// //     for(auto i : elem.second.cmpVec) {
+// //       std::cout << i << ", ";
+// //     }
+// //     std::cout << std::endl;
+// //   }
+  
+// //   std::cout << std::endl;
+// //   std::cout << "==========================" << std::endl;
+// //   std::cout << std::endl;
+  
+//   std::vector<int> resultSeries;
+//   resultSeries.reserve(n);
+  
+//   // Test
+//   resultSeries.push_back(currentNum);
+//   cmpMap.at(currentNum).idx = 0;
+  
+//   std::unordered_set<int> alredyUsed = {currentNum};
+  
+//   int lastNum = 0;
+//   std::vector<int> multiplePosibilites = {};
+  
+//   for(int idx = 1; idx < n; ++idx) {
+//     int tmpNum = -1;
+//     bool nextValueFound = false;
+   
+//     for(int num : cmpMap.at(currentNum).cmpVec) {
+      
+//      // std::cout << num <<", ";
+//       if(num != lastNum && alredyUsed.count(num) == 0 && cmpMap.at(currentNum).cmpAlredyUsed.count(num) == 0) {
+//         if (cmpMap[num].left == nullptr || cmpMap[num].right == nullptr || 
+//             cmpMap[num].left->value == currentNum || cmpMap[num].right->value == currentNum) { 
+//             if(tmpNum == -1) {
+//               tmpNum = num;
+//             }
+//             else {
+//               bool elemFind = false;
+//               for (auto i : multiplePosibilites) {
+//                 if(currentNum == i) {
+//                   elemFind =true;
+//                   break;
+//                 }
+//               }
+              
+//               if(!elemFind) {
+//                 multiplePosibilites.push_back(currentNum);
+//               }
+//             }
+//         }
+//       }
+//     }
+//      std::cout << " M2 " << std::endl;
+//     if(tmpNum != -1) {
+//         lastNum = currentNum;
+//         cmpMap.at(currentNum).cmpAlredyUsed.insert(tmpNum);
+//         currentNum = tmpNum;
+//         // Pass index of new element in vector
+//         cmpMap.at(currentNum).idx = resultSeries.size();
+//         resultSeries.push_back(currentNum);
+        
+//         alredyUsed.insert(currentNum);  
+//       }
+//       else {
+//         // For test print result
+// //         std::cout << "Faild Result (" << numberResult++ << "): ";
+// //         for (auto num : resultSeries) {
+// //           std::cout << num << ", ";
+// //         }
+// //         std::cout << std::endl;
+//         // Delete last 
+        
+//         // Find index of the last multipossible element
+//         if(multiplePosibilites.size() > 0) {
+//           int lastMulti = multiplePosibilites.back();
+//           int lastIdx = 0;
+//           for(auto i : resultSeries) {
+//             if(lastMulti == i) {
+//               break;
+//             }
+//             lastIdx++;
+//           }
+          
+//           idx--;
+//           for (; idx > lastIdx; idx--) {
+//             int elem = resultSeries.back();
+//             cmpMap.at(elem).idx = -1;
+//             cmpMap.at(elem).cmpAlredyUsed.clear();
+//             alredyUsed.erase(elem);
+//             resultSeries.pop_back();
+            
+//           }
+//           currentNum = lastMulti;
+//           lastNum = resultSeries.at(cmpMap[lastMulti].idx - 1);
+          
+// //           std::cout << "Test: " << currentNum << " << " << lastNum << std::endl; 
+//           multiplePosibilites.pop_back();
+//         }
+//         else {
+//           // No possible result - in teorii
+//         }
+//       }
+//   }
+//   return resultSeries;
