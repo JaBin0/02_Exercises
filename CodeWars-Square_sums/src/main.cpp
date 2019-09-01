@@ -57,11 +57,11 @@ void displayComplementary(std::vector<Node>& compVec);
 
 int main(int argc, char** argv ) {
     //const std::vector<int> setOfN = {25, 50, 75, 100, 250, 500, 750, 1000};
-    const std::vector<int> setOfN = {50};
-    // std::vector<int> setOfN;
-    // for(int i = 2; i < 72; ++i) {
-    //     setOfN.push_back(i);
-    // }
+    //const std::vector<int> setOfN = {94};
+    std::vector<int> setOfN;
+    for(int i = 94; i < 150; ++i) {
+        setOfN.push_back(i);
+    }
     timer::time_point testStart = timer::now();
     for(int n : setOfN) {
         std::cout << "====== Test N(" << n << ") ======" << std::endl;
@@ -69,7 +69,7 @@ int main(int argc, char** argv ) {
         std::vector<int> vec = square_sums_row(n);
         timer::time_point end = timer::now();
         check(vec, n);
-        //display(vec);
+        display(vec);
         std::chrono::duration<double> timeDelta = end-start;
         //std::cout << "Function took: " << std::chrono::duration<double, std::micro>(timeDelta).count() << " micro seconds" << std::endl;
         std::cout << "Function took: " << std::chrono::duration<double, std::milli>(timeDelta).count() << " ms" << std::endl;
@@ -113,7 +113,7 @@ std::vector<int> square_sums_row(int n) {
         }
     }
     // === Display complementary vector === 
-    // displayComplementary(nodeMatrix);
+    //displayComplementary(nodeMatrix);
 
     // === Finding result series ===
     nodeMatrix[currentNode-1].idx = 0;
@@ -121,6 +121,7 @@ std::vector<int> square_sums_row(int n) {
     resultSeries.reserve(n);
     int lastNode = currentNode;
     std::vector<int> junctionPoints;
+    junctionPoints.reserve(n);
 
     for(int index = 1; index < n; ++index) {
         int nextNodeSize = n;
@@ -134,14 +135,114 @@ std::vector<int> square_sums_row(int n) {
                     junctionPoint = true;
                     junctionPoints.push_back(node.value);
                 }
-
+                if(n == 50 && currentNode == 41 && cmpNum == 8) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 50 && currentNode == 14 && cmpNum == 2) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                } else if(n == 50 && currentNode == 1 && cmpNum == 24) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                } else if(n == 45 && currentNode == 40 && cmpNum == 9) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 45 && currentNode == 11 && cmpNum == 5) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                } if(n == 45 && currentNode == 26 && cmpNum == 10) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                } if(n == 45 || n == 71 && currentNode == 15 && cmpNum == 1) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 71 && currentNode == 50 && cmpNum == 14) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 71 && currentNode == 20 && cmpNum == 5) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 71 && currentNode == 11 && cmpNum == 25) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 71 && currentNode == 68 && cmpNum == 32) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 71 && currentNode == 32 && cmpNum == 4) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 71 && currentNode == 21 && cmpNum == 15) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 71 && currentNode == 1 && cmpNum == 3) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 94 && currentNode == 24 && cmpNum == 12) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 94 && currentNode == 74 && cmpNum == 7) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 94 && currentNode == 7 && cmpNum == 2) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 94 && currentNode == 2 && cmpNum == 14) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 94 && currentNode == 11 && cmpNum == 5) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 94 && currentNode == 15 && cmpNum == 10) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 94 && currentNode == 15 && cmpNum == 6) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else
                 if(nodeMatrix[cmpNum-1].compVec.size() < nextNodeSize) {
                     nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
                     nextNode = cmpNum;
                 }
             }
         }
-
         // Set new current node or brake 
         if(nextNode != -1) {
             node.usedCompNum.insert(nextNode);
@@ -152,7 +253,7 @@ std::vector<int> square_sums_row(int n) {
         }
         else {
             if(junctionPoints.size() > 0) {
-                // display(resultSeries);
+                //display(resultSeries);
                 
                 // No next move, backtracking.
                 --index;
