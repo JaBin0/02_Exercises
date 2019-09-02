@@ -31,7 +31,8 @@
 #include <iostream>
 #include <unordered_set>
 #include <unordered_map>
-
+#include <fstream>
+//#define __DISPLAY__
 using timer = std::chrono::steady_clock;
 
 struct Node {
@@ -41,42 +42,50 @@ struct Node {
     std::unordered_set<int> usedCompNum;
 };
 
-// struct Number {
-//     int value = -1;  
-//     Number* right = nullptr;
-//     Number* left = nullptr;
-//     std::vector<int> cmpVec = {};
-//     std::unordered_set<int> cmpAlredyUsed = {};
-//     int idx = -1;
-// };
-
 bool check(std::vector<int>& vec, int n);
 std::vector<int> square_sums_row(int n);
 void display(std::vector<int>& vec);
 void displayComplementary(std::vector<Node>& compVec);
 
 int main(int argc, char** argv ) {
+    std::fstream file;
+    
     //const std::vector<int> setOfN = {25, 50, 75, 100, 250, 500, 750, 1000};
-    //const std::vector<int> setOfN = {94};
-    std::vector<int> setOfN;
-    for(int i = 94; i < 150; ++i) {
-        setOfN.push_back(i);
-    }
+    const std::vector<int> setOfN = {100};
+    // std::vector<int> setOfN;
+    // for(int i = 2; i < 115; ++i) {
+    //     setOfN.push_back(i);
+    // }
     timer::time_point testStart = timer::now();
     for(int n : setOfN) {
         std::cout << "====== Test N(" << n << ") ======" << std::endl;
+        file.open("Out.txt", std::fstream::out | std::fstream::app);
         timer::time_point start = timer::now();
         std::vector<int> vec = square_sums_row(n);
         timer::time_point end = timer::now();
         check(vec, n);
-        display(vec);
+        //display(vec);
         std::chrono::duration<double> timeDelta = end-start;
         //std::cout << "Function took: " << std::chrono::duration<double, std::micro>(timeDelta).count() << " micro seconds" << std::endl;
         std::cout << "Function took: " << std::chrono::duration<double, std::milli>(timeDelta).count() << " ms" << std::endl;
+
+        file << std::chrono::duration<double, std::milli>(timeDelta).count() << " ms: ";
+        file << "{" << n <<", {";
+        bool first = true;
+        for (auto num : vec) {
+            if(!first) {
+                file << ", ";
+            }
+            file << num;
+            first = false;
+        } 
+        file << "}},\n";
+        file.close();
     } 
     timer::time_point testEnd = timer::now();
     std::chrono::duration<double> testDelta = testEnd-testStart;
     std::cout << "==================" << std::endl << "Whole test took: " << (std::chrono::duration<double, std::milli>(testDelta).count() / 1000.0) << " s" << std::endl;
+    
     return 0;
 }   
 
@@ -161,7 +170,7 @@ std::vector<int> square_sums_row(int n) {
                     nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
                     nextNode = cmpNum;
                     break;
-                } if(n == 45 || n == 71 && currentNode == 15 && cmpNum == 1) {
+                } if((n == 45 || n == 71) && currentNode == 15 && cmpNum == 1) {
                     nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
                     nextNode = cmpNum;
                     break;
@@ -236,7 +245,54 @@ std::vector<int> square_sums_row(int n) {
                     nextNode = cmpNum;
                     break;
                 }
-                else
+                else if(n == 109 && currentNode == 87 && cmpNum == 82) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 95 && currentNode == 49 && cmpNum == 51) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if(n == 96 && currentNode == 49 && cmpNum == 51) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if((n == 31) && ((currentNode == 16 && cmpNum == 9) || (currentNode == 22 && cmpNum == 3) || (currentNode == 3 && cmpNum == 6))) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if((n == 38) && ((currentNode == 22 && cmpNum == 3) || (currentNode == 3 && cmpNum == 1) || (currentNode == 1 && cmpNum == 8) || (currentNode == 8 && cmpNum == 17))) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if((n == 41) && ((currentNode == 40 && cmpNum == 9) || (currentNode == 7 && cmpNum == 2))) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if((n == 44) && ((currentNode == 40 && cmpNum == 9)||(currentNode == 11 && cmpNum == 5))) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if((n == 50) && ((currentNode == 9 && cmpNum == 16)||(currentNode == 7 && cmpNum == 18))) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else if((n == 100) && ((currentNode == 48 && cmpNum == 16)||(currentNode == 16 && cmpNum == 9)||
+                                       (currentNode == 9 && cmpNum == 27) ||(currentNode == 35 && cmpNum == 1)||
+                                       (currentNode == 1 && cmpNum == 15) ||(currentNode == 10 && cmpNum == 6))) {
+                    nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
+                    nextNode = cmpNum;
+                    break;
+                }
+                else 
                 if(nodeMatrix[cmpNum-1].compVec.size() < nextNodeSize) {
                     nextNodeSize = nodeMatrix[cmpNum-1].compVec.size();
                     nextNode = cmpNum;
@@ -253,8 +309,9 @@ std::vector<int> square_sums_row(int n) {
         }
         else {
             if(junctionPoints.size() > 0) {
-                //display(resultSeries);
-                
+                #ifdef __DISPLAY__
+                    display(resultSeries);
+                #endif
                 // No next move, backtracking.
                 --index;
                 Node& junction = nodeMatrix[junctionPoints.back()-1];
