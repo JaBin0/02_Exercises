@@ -33,8 +33,40 @@
 	You do not need to worry about validation - you will only receive valid mathematical expressions following the above rules.
 */
 #include <iostream>
+#include <string.h>
+#include <vector>
+
+double calc(std::string expression);
 
 int main(int argc, char** argv ) {
 	std::cout << "Code Wars: Evaluate mathematical expression" << std::endl;
+	std::string expr_1 = "42 + 11 - 82.24 * 4 / 521 + 0.15 - 18 * 4.258";
+	std::cout << expr_1 << "=" << calc(expr_1) << std::endl;
     return 0;
-}   
+}
+
+double calc(std::string expression) {
+	std::string num; 
+	std::vector<std::string> exprVec;
+	for(auto it = expression.begin(); it != expression.end(); ++it) {
+		if('0' <= *it && *it <= '9') {
+			num += *it;
+			while(('0' <= *(it+1) && *(it+1) <= '9') || *(it+1) == '.') {
+				++it;
+				num += *it;
+			}
+			std::cout <<"Number: " << num.data() << std::endl;
+			exprVec.push_back(num);
+			num.clear();
+		}
+		else if(*it == '+' || *it == '-' || *it == '*' || *it=='/' || *it=='(' || *it==')') {
+			exprVec.push_back({*it});
+			std::cout <<"Other: " << *it << std::endl;
+		}
+	}
+
+	// look for priority 1
+	for(auto )
+
+	return 0;
+}
