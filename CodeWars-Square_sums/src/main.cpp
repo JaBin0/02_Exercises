@@ -55,12 +55,12 @@ void printToFile(std::fstream& file, double time, int n, std::vector<int>& vec);
 
 int main(int argc, char** argv ) {
   //const std::vector<int> setOfN = {25, 50, 75, 100, 250, 500, 750, 1000};
-  //const std::vector<int> setOfN = {157};
+  //const std::vector<int> setOfN = {574};
   std::vector<int> setOfN;
-  for(int i = 351; i < 1001; ++i) {
+  for(int i = 2; i < 1001; ++i) {
     setOfN.push_back(i);
   }
-  double threshold = 100; // 100 ms;
+  double threshold = 130; // 100 ms;
   loadRules(rules);
   std::fstream file;
   std::vector<int> prevN = {};
@@ -103,7 +103,7 @@ int main(int argc, char** argv ) {
 
 std::vector<int> square_sums_row(int n, std::vector<int>& firstErr, bool& timeOut) {
   timer::time_point start = timer::now();
-  double timeOut_treshold = 40000;
+  double timeOut_treshold = 100000;
   bool first = true;
   if(n < 15) {
     return {};
@@ -141,9 +141,10 @@ std::vector<int> square_sums_row(int n, std::vector<int>& firstErr, bool& timeOu
   }
   // === Display complementary vector === 
   //displayComplementary(nodeMatrix);
-  if(n == 352) {
-    c_n = 324; 
-  }
+  if(n==352){c_n=324;}
+  if(n==391){c_n=338;}
+  if(n==574){c_n=450;}
+  
 
   // === Finding result series ===
   nodeMatrix[c_n-1].idx = 0;
@@ -197,7 +198,7 @@ std::vector<int> square_sums_row(int n, std::vector<int>& firstErr, bool& timeOu
         #ifdef __DISPLAY__
           if(first) {
             firstErr = resultSeries;
-            display(resultSeries);
+            //display(resultSeries);
             first = false;
           }
         #endif
@@ -321,7 +322,7 @@ void loadRules(std::unordered_map<int, std::vector<std::pair<int, int>>>& rules)
 }
 void optimize(std::vector<int> vec, std::vector<int> err, std::unordered_map<int, std::vector<std::pair<int, int>>>& rules, int n) {
   for(int idx = 0; idx < err.size(); ++idx) {
-    if(err[idx] != vec[idx]) {
+    if(idx != 0 && err[idx] != vec[idx]) {
       if(rules.count(n) == 0) {
         rules[n] = {};
       }
