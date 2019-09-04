@@ -1,2 +1,363 @@
 338, 391, 393, 336, 340, 389, 395, 334, 342, 387, 397, 332, 344, 385, 399, 330, 346, 383, 401, 328, 348, 381, 403, 326, 350, 379, 405, 324, 352, 377, 407, 322, 354, 375, 409, 320, 356, 373, 411, 318, 358, 371, 413, 316, 360, 369, 415, 314, 362, 367, 309, 267, 262, 414, 370, 359, 317, 412, 372, 357, 319, 410, 374, 355, 321, 408, 376, 353, 323, 406, 378, 351, 325, 404, 380, 349, 327, 402, 382, 347, 329, 400, 384, 345, 331, 398, 386, 343, 333, 396, 388, 341, 335, 394, 390, 339, 337, 392, 284, 292, 237, 247, 282, 294, 235, 249, 280, 296, 233, 251, 278, 298, 231, 253, 276, 300, 229, 255, 274, 302, 227, 257, 368, 361, 315, 310, 366, 363, 313, 312, 364, 365, 311, 265, 264, 220, 221, 308, 268, 261, 223, 306, 270, 259, 225, 304, 272, 212, 188, 173, 151, 290, 286, 243, 241, 288, 196, 245, 239, 202, 198, 163, 161, 200, 124, 165, 159, 130, 194, 206, 155, 169, 192, 208, 153, 171, 190, 210, 114, 175, 266, 263, 178, 222, 307, 269, 260, 224, 305, 271, 258, 226, 303, 273, 256, 228, 301, 275, 254, 230, 299, 277, 252, 232, 297, 279, 250, 234, 295, 281, 248, 236, 293, 283, 246, 238, 291, 285, 244, 240, 289, 287, 242, 199, 201, 160, 164, 197, 203, 158, 166, 195, 205, 156, 168, 193, 207, 154, 170, 191, 209, 152, 172, 189, 211, 150, 174, 187, 213, 148, 176, 185, 215, 146, 143, 218, 182, 179, 145, 216, 184, 177, 147, 214, 186, 138, 118, 107, 217, 183, 141, 115, 110, 86, 139, 117, 108, 181, 219, 142, 83, 113, 112, 144, 180, 109, 116, 140, 149, 76, 120, 204, 157, 167, 122, 134, 91, 105, 64, 132, 93, 103, 66, 78, 43, 126, 99, 97, 128, 68, 101, 95, 74, 70, 51, 49, 72, 28, 53, 47, 34, 162, 127, 129, 96, 100, 125, 131, 94, 102, 123, 133, 92, 104, 121, 135, 90, 106, 119, 137, 88, 81, 63, 58, 111, 85, 84, 60, 136, 89, 80, 41, 59, 62, 82, 87, 57, 24, 40, 9, 55, 45, 36, 13, 23, 98, 71, 50, 31, 69, 75, 46, 54, 67, 77, 44, 56, 65, 79, 42, 39, 61, 20, 29, 52, 48, 73, 27, 37, 12, 4, 32, 17, 19, 30, 6, 10, 26, 38, 11, 25,
 338, 391, 393, 336, 340, 389, 395, 334, 342, 387, 397, 332, 344, 385, 399, 330, 346, 383, 401, 328, 348, 381, 403, 326, 350, 379, 405, 324, 352, 377, 407, 322, 354, 375, 409, 320, 356, 373, 411, 318, 358, 371, 413, 316, 360, 369, 415, 314, 362, 367, 309, 267, 262, 414, 370, 359, 317, 412, 372, 357, 319, 410, 374, 355, 321, 408, 376, 353, 323, 406, 378, 351, 325, 404, 380, 349, 327, 402, 382, 347, 329, 400, 384, 345, 331, 398, 386, 343, 333, 396, 388, 341, 335, 394, 390, 339, 337, 392, 284, 292, 237, 247, 282, 294, 235, 249, 280, 296, 233, 251, 278, 298, 231, 253, 276, 300, 229, 255, 274, 302, 227, 257, 368, 361, 315, 310, 366, 363, 313, 312, 364, 365, 311, 265, 264, 220, 221, 308, 268, 261, 223, 306, 270, 259, 225, 304, 272, 212, 188, 173, 151, 290, 286, 243, 241, 288, 196, 245, 239, 202, 198, 163, 161, 200, 124, 165, 159, 130, 194, 206, 155, 169, 192, 208, 153, 171, 190, 210, 114, 175, 266, 263, 178, 222, 307, 269, 260, 224, 305, 271, 258, 226, 303, 273, 256, 228, 301, 275, 254, 230, 299, 277, 252, 232, 297, 279, 250, 234, 295, 281, 248, 236, 293, 283, 246, 238, 291, 285, 244, 240, 289, 287, 242, 199, 201, 160, 164, 197, 203, 158, 166, 195, 205, 156, 168, 193, 207, 154, 170, 191, 209, 152, 172, 189, 211, 150, 174, 187, 213, 148, 176, 185, 215, 146, 143, 218, 182, 179, 145, 216, 184, 177, 147, 214, 186, 138, 118, 107, 217, 183, 141, 115, 110, 86, 139, 117, 108, 181, 219, 142, 83, 113, 112, 144, 180, 109, 116, 140, 149, 76, 120, 204, 157, 167, 122, 134, 91, 105, 64, 132, 93, 103, 66, 78, 43, 126, 99, 97, 128, 68, 101, 95, 74, 70, 51, 49, 72, 28, 53, 47, 34, 162, 127, 129, 96, 100, 125, 131, 94, 102, 123, 133, 92, 104, 121, 135, 90, 106, 119, 137, 88, 81, 63, 58, 111, 85, 84, 60, 136, 89, 80, 41, 59, 62, 82, 87, 57, 24, 40, 9, 55, 45, 36, 13, 23, 98, 71, 50, 31, 69, 75, 46, 54, 67, 77, 44, 56, 65, 79, 21, 15, 1, 8, 73, 48, 16, 33, 3, 61, 20, 5, 4, 32, 17, 19, 30, 6, 10, 26, 38, 11, 25, 39, 42, 22, 27, 37, 12, 52, 29, 35, 14, 2, 7, 18
+
+
+/* Square sums
+  ====== Description ======
+  Write function square_sums that, given integer number N (in range 2..1000),
+  returns array of integers 1..N arranged in a way, so sum of each 2 consecutive numbers is a square.
+
+  Solution is valid if and only if following two criterias are met:
+
+  1) Each number in range 1..N is used once and only once.
+  2) Sum of each 2 consecutive numbers is a perfect square.
+
+  ====== Example ======
+  For N=15 solution could look like this:
+  [ 9, 7, 2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 15, 1, 8 ]
+  9+7=16; 7+2=9; 2+14=16; 14+11=25; 11+5=16; 5+4=9; ...
+
+  ====== Proof of checker works ======
+  std::vector<int> test_passed = {9, 7, 2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 15, 1, 8};
+  std::vector<int> test_error1 = {9, 7, 2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 8};     // Less elements
+  std::vector<int> test_error2 = {9, 7, 2, 14, 11, 5, 4, 12, 13, 10, 6, 10, 15, 1, 8}; // number used 2 times
+  std::vector<int> test_error3 = {9, 7, 2, 14, 11, 4, 5, 12, 13, 3, 6, 10, 1, 15, 8};  // Not a perfect square
+  check(test_passed, 15);
+  check(test_error1, 15);
+  check(test_error2, 15);
+  check(test_error3, 15);
+  
+  //const std::vector<int> setOfN = {25, 50, 75, 500};
+*/
+#include <chrono>
+#include <vector>
+#include <math.h>
+#include <iostream>
+#include <unordered_set>
+#include <unordered_map>
+#include <fstream>
+#include <algorithm>
+//#define __DISPLAY__
+using timer = std::chrono::steady_clock;
+
+std::unordered_map<int, std::vector<std::pair<int, int>>> rules = {
+// {31,{{16,9},{22,3},{3,6}}},
+// {38,{{22,3},{3,1},{1,8},{8,17}}},
+// {41,{{40,9},{7,2}}},
+// {44,{{40,9},{11,5}}},
+// {45,{{40,9},{11,5},{26,10},{15,1}}},
+// {50,{{41,8},{14,2},{1,24},{9,16},{7,18}}},
+// {71,{{11,25},{20,5},{50,14},{15,1},{68,32},{32,4},{21,15},{1,3}}},
+// {94,{{24,12},{74,7},{7,2},{2,14},{11,5},{15,10}}},
+// {95,{{49,51},{26,38},{28,8},{8,1},{1,3},{3,6},{6,10}}},
+// {96,{{49,51},{26,38},{28,8},{8,1},{1,3},{3,6},{6,10}}},
+// {100,{{48,16},{16,9},{9,27} ,{35,1},{1,15} ,{10,6}}},
+// {105,{{7,2},{23,13},{38,11}}},
+// {108,{{44,37},{8,1},{11,5},{17,19}}},
+// {109,{{87,82},{52,29},{20,5},{5,11}}},
+// {110,{{56,8},{8,1},{52,12},{3,22},{11,5}}},
+// {111,{{4,21},{21,15},{22,3},{3,6}}},
+// {112,{{47,2},{23,13},{13,3},{3,22},{29,7},{9,16},{16,20}}},
+// {113,{{26,10},{28,8}}},
+// {114,{{24,1},{5,20},{16,9}}},
+// {115,{{36,13},{13,12},{39,25},{8,1},{1,3},{58,6}}},
+// {116,{{47,2},{21,28},{8,1},{1,24},{24,25},{9,16}}},
+// {117,{{60,21},{33,16},{7,2}}},
+// {118,{{48,1},{28,8},{10,6}}},
+// {119,{{22,3},{36,28},{28,8},{1,15},{4,5},{10,6}}},
+// {121,{{7,2},{2,23},{26,10},{15,21},{21,4},{4,5},{11,25},{45,19},{30,6}}},
+// {129,{{59,22},{22,3},{43,3},{43,6},{6,30},{62,2},{2,14},{58,42},{1,24},{12,4}}},
+// {137,{{29,20},{20,5},{34,2},{21,4},{4,12},{13,36}}},
+// {138,{{2,12}}},
+// {139,{{15,21},{21,4},{30,6},{17,8},{8,1},{20,5},{11,25}}},
+// {140,{{116,80},{51,30},{30,19},{19,6},{34,2},{4,21}}},
+// {141,{{38,26},{55,9},{78,22},{14,11},{10,6},{6,30},{30,19},{4,5},{1,8}}},
+// {142,{{73,8},{8,17},{17,32},{35,1},{30,19},{10,15},{15,21},{21,4},{4,5},{22,14},{11,38}}},
+// {145,{{111,114},{39,25},{40,9},{20,5}}},
+// {336,{{17,19},{10,26}}},
+// {384,{{48,33}}},
+// {451,{{45,4},{4,21}}},
+// {415,{{79,21},{15,1},{1,8},{48,16},{61,20},{20,5},{5,4},{10,26}}},
+// {539,{{34,2},{23,58},{4,21},{21,15},{5,11},{31,18},{3,1}}},
+// {540,{{73,27},{54,10},{6,19},{4,12},{12,24},{25,11},{484,477},{11,5},{33,3}}},
+// {575,{{23,2},{35,29},{7,18}}},
+// {729,{{20,16},{4,5},{54,10},{6,19}}},
+// {750,{{47,2},{31,18},{7,9}}},
+// {751,{{30,6},{6,10},{23,2}}},
+// {752,{{29,20},{44,37},{27,22},{22,3}}},
+// {753,{{541,483}}},
+// {754,{{690,606},{541,483}}},
+// {755,{{690,606},{614,682},{689,680},{541,483},{5,11},{7,2},{34,15}}},
+// {756,{{58,42},{42,22}}},
+// {757,{{9,55},{23,2},{53,11},{11,5},{5,4},{4,12}}},
+// {759,{{685,759},{57,7},{49,32},{17,19},{19,6}}},
+// {833,{{27,54},{39,25},{53,28},{21,4},{20,16}}},
+// {834,{{766,678},{687,682},{535,489},{64,36},{13,12}}},
+// {835,{{766,678},{72,9},{52,12},{76,5}}},
+// {885,{{69,12}}},
+// {936,{{34,15},{15,1},{39,10},{28,21},{24,25},{17,32}}},
+// {963,{{38,11},{11,5},{5,4},{17,19}}},
+};
+
+
+
+struct Node {
+  int value = -1;
+  int idx = -1;
+  std::vector<int> compVec;
+  std::unordered_set<int> usedCompNum;
+};
+
+bool check(std::vector<int>& vec, int n);
+std::vector<int> square_sums_row(int n);
+void display(std::vector<int>& vec);
+void displayComplementary(std::vector<Node>& compVec);
+void loadRules(std::unordered_map<int, std::vector<std::pair<int, int>>>& rules);
+
+int main(int argc, char** argv ) {
+  loadRules(rules);
+  std::fstream file;
+  
+  //const std::vector<int> setOfN = {25, 50, 75, 100, 250, 500, 750, 1000};
+  //const std::vector<int> setOfN = {50};
+  std::vector<int> setOfN;
+  for(int i = 2; i < 1001; ++i) {
+    setOfN.push_back(i);
+  }
+  timer::time_point testStart = timer::now();
+  for(int n : setOfN) {
+    std::cout << "====== Test N(" << n << ") ======" << std::endl;
+    file.open("Out.txt", std::fstream::out | std::fstream::app);
+    timer::time_point start = timer::now();
+    std::vector<int> vec = square_sums_row(n);
+    timer::time_point end = timer::now();
+    check(vec, n);
+    //display(vec);
+    std::chrono::duration<double> timeDelta = end-start;
+    //std::cout << "Function took: " << std::chrono::duration<double, std::micro>(timeDelta).count() << " micro seconds" << std::endl;
+    std::cout << "Function took: " << std::chrono::duration<double, std::milli>(timeDelta).count() << " ms" << std::endl;
+
+    file << std::chrono::duration<double, std::milli>(timeDelta).count() << " ms: ";
+    file << "{" << n <<", {";
+    bool first = true;
+    for (auto num : vec) {
+      if(!first) {
+        file << ", ";
+      }
+      file << num;
+      first = false;
+    } 
+    file << "}},\n";
+    file.close();
+  } 
+  timer::time_point testEnd = timer::now();
+  std::chrono::duration<double> testDelta = testEnd-testStart;
+  std::cout << "==================" << std::endl << "Whole test took: " << (std::chrono::duration<double, std::milli>(testDelta).count() / 1000.0) << " s" << std::endl;
+  
+  return 0;
+}   
+
+std::vector<int> square_sums_row(int n) {
+  bool first = true;
+  if(n < 15) {
+    return {};
+  }
+  
+  // === Get rules for the n ===
+  std::vector<std::pair<int, int>> rulesVec = rules[n];
+
+  // ===  Vector of squared numbers === 
+  int base = sqrt(n + (n - 1));
+  std::vector<int> squareVec;
+  squareVec.reserve(base);
+  for (; base > 1; base--) {
+    squareVec.push_back(base * base);
+  }
+
+  // === Find complementary ===
+  int c_n = 1;
+  std::vector<Node> nodeMatrix;
+  nodeMatrix.reserve(n);
+  for(int num = 1; num <= n; ++num) {
+    int compCount = 0;
+    nodeMatrix.push_back({num, -1, {}, {}});
+    for(int square : squareVec) {
+      int compNum = square - num;
+      if(compNum > 0 && compNum <= n && compNum != num) {
+        nodeMatrix[num-1].compVec.push_back(compNum);
+        ++compCount;
+      }
+    }
+
+    if(num != c_n && compCount < nodeMatrix[c_n-1].compVec.size()) {
+      c_n = num;
+    }
+  }
+  // === Display complementary vector === 
+  //displayComplementary(nodeMatrix);
+
+  // === Finding result series ===
+  nodeMatrix[c_n-1].idx = 0;
+  std::vector<int> resultSeries = {c_n};
+  resultSeries.reserve(n);
+  int lastNode = c_n;
+  std::vector<int> junctionPoints;
+  junctionPoints.reserve(n);
+
+  for(int index = 1; index < n; ++index) {
+    int nextNodeSize = n;
+    int nextNode = -1;
+    
+    Node& node = nodeMatrix[c_n-1];
+    bool junctionPoint = false;
+    for(int cmpN : node.compVec) {
+      if(lastNode != cmpN && nodeMatrix[cmpN-1].idx==-1 && node.usedCompNum.count(cmpN)==0) {
+        if(nextNode != -1 && !junctionPoint ) {
+          junctionPoint = true;
+          junctionPoints.push_back(node.value);
+        }
+        
+        for (auto rule : rulesVec) {
+          if(c_n == rule.first && cmpN == rule.second) {
+              nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
+              nextNode = cmpN;
+              break;
+          }
+        }
+
+        if(nodeMatrix[cmpN-1].compVec.size() < nextNodeSize) {
+          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
+          nextNode = cmpN;
+        }
+      }
+    }
+    // Set new current node or brake 
+    if(nextNode != -1) {
+      node.usedCompNum.insert(nextNode);
+      lastNode = c_n;
+      c_n = nextNode;
+      nodeMatrix[c_n-1].idx = resultSeries.size();
+      resultSeries.push_back(c_n);
+    }
+    else {
+      if(junctionPoints.size() > 0) {
+        #ifdef __DISPLAY__
+          if(first) {
+            display(resultSeries);
+            first = false;
+          }
+        #endif
+        // No next move, backtracking.
+        --index;
+        Node& junction = nodeMatrix[junctionPoints.back()-1];
+        for(; index > junction.idx; --index) {
+          Node& nodeToDelete = nodeMatrix[resultSeries.back()-1];
+          nodeToDelete.idx = -1;
+          nodeToDelete.usedCompNum.clear();
+          resultSeries.pop_back();
+        }
+        c_n = junction.value;
+        lastNode = resultSeries[junction.idx - 1];
+        junctionPoints.pop_back();
+      }
+      else {
+        return {};
+      }
+    }
+  }
+  return resultSeries;
+}
+
+bool check(std::vector<int>& vec, int n) {
+  // Test 1: Check the size of the vector
+  if(vec.size() != n) {
+    std::cout << n << " Faild - Size of the vector does not match" << std::endl;
+    return false;
+  }
+
+  // Test 2: Check if every number is used only one times.
+  bool everyNumberUsed = true;
+  std::unordered_set<int> alreadyUsed;
+  for (int num : vec) {
+    if(alreadyUsed.count(num) != 0) {
+      everyNumberUsed = false;
+      break;
+    }
+
+    alreadyUsed.insert(num);
+  }
+  if(!everyNumberUsed) {
+    std::cout << n << " Faild - At least one number is used two times" << std::endl;
+    return false;
+  }
+
+  // Test 3: Check if sum of two conseciutive numbers is perfect square
+  bool check = true;
+  for(int idx = 0; idx < vec.size()-2; ++idx) {
+    int sum = vec.at(idx) + vec.at(idx+1);
+    int sqrtVal = std::sqrt(sum);
+    if((sqrtVal * sqrtVal) != sum) {
+      check = false;
+      break;
+    }
+  }
+  if (!check) {
+    std::cout << n << " Faild - Sum of two conseciutive numer is not equal to perfect square" << std::endl;
+    return false;
+  }
+
+  std::cout << n << " Passed" << std::endl;
+  return true;
+}
+
+void display(std::vector<int>& vec) {
+  for (auto num : vec) {
+    std::cout << num << ", ";
+  }
+  std::cout << std::endl;
+}
+
+void displayComplementary(std::vector<Node>& compVec) {
+  for(int idx = 0; idx < compVec.size(); ++idx) {
+    std::cout << "[" << idx + 1 << "] <" << compVec.at(idx).compVec.size() << ">: ";
+    for(auto compNum :  compVec.at(idx).compVec) {
+      std::cout << compNum << ", ";
+    }
+    std::cout << std::endl;
+  }
+}
+
+void loadRules(std::unordered_map<int, std::vector<std::pair<int, int>>>& rules) {
+  std::fstream file;
+  file.open("Rules.txt", std::fstream::in);
+  if(file.is_open()) {
+    std::string line;
+    while(!file.eof()) {
+      std::getline(file, line);
+      auto semi = line.find(',', 0);
+      int nvalue = std::atoi(line.substr(1,semi-1).data());
+      rules[nvalue] = {};
+      std::vector<std::pair<int, int>>& ruleVec = rules[nvalue];
+      int st = line.find('{', semi+2);
+      while(st != -1) {
+        auto semi = line.find(',', st);
+        auto end = line.find('}',st);
+        int prev = std::atoi(line.substr(st+1, semi-st-1).data());
+        int next = std::atoi(line.substr(semi+1, end-semi-1).data());
+        ruleVec.push_back({prev,next});
+        st = line.find('{', end+1);
+      };
+    }
+    file.close();
+    // for (auto item : rules) {
+    //   std::cout << "["<<item.first<<"]:";
+    //   for (auto p : item.second) {
+    //     std::cout << "{"<<p.first<<","<<p.second<<"},";
+    //   }
+    //   std::cout << std::endl;
+    // }
+  }
+  else {
+    std::cout << "FAILD" << std::endl;
+  }
+}

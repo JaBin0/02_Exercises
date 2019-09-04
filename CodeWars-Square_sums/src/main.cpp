@@ -32,8 +32,10 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <fstream>
+#include <algorithm>
 #define __DISPLAY__
 using timer = std::chrono::steady_clock;
+std::unordered_map<int, std::vector<std::pair<int, int>>> rules = {};
 
 struct Node {
   int value = -1;
@@ -43,44 +45,54 @@ struct Node {
 };
 
 bool check(std::vector<int>& vec, int n);
-std::vector<int> square_sums_row(int n);
+std::vector<int> square_sums_row(int n, std::vector<int>& firstErr, bool& timeOut);
 void display(std::vector<int>& vec);
 void displayComplementary(std::vector<Node>& compVec);
+void loadRules(std::unordered_map<int, std::vector<std::pair<int, int>>>& rules);
+void optimize(std::vector<int> vec, std::vector<int> err, std::unordered_map<int, std::vector<std::pair<int, int>>>& rules, int n);
+void saveOptimizeMap( std::unordered_map<int, std::vector<std::pair<int, int>>>& rules);
+void printToFile(std::fstream& file, double time, int n, std::vector<int>& vec);
 
 int main(int argc, char** argv ) {
-  std::fstream file;
-  
   //const std::vector<int> setOfN = {25, 50, 75, 100, 250, 500, 750, 1000};
-  //const std::vector<int> setOfN = {272};
+  //const std::vector<int> setOfN = {157};
   std::vector<int> setOfN;
-  for(int i = 2; i < 1001; ++i) {
+  for(int i = 351; i < 1001; ++i) {
     setOfN.push_back(i);
   }
+  double threshold = 100; // 100 ms;
+  loadRules(rules);
+  std::fstream file;
+  std::vector<int> prevN = {};
   timer::time_point testStart = timer::now();
-  for(int n : setOfN) {
+  //for(int n : setOfN) {
+  for (int i=0; i < setOfN.size(); ++i) {
+    int n = setOfN[i];
     std::cout << "====== Test N(" << n << ") ======" << std::endl;
     file.open("Out.txt", std::fstream::out | std::fstream::app);
+    std::vector<int> firstErr{};
+    bool timeOut = false;
     timer::time_point start = timer::now();
-    std::vector<int> vec = square_sums_row(n);
+    std::vector<int> vec = square_sums_row(n, firstErr, timeOut);
     timer::time_point end = timer::now();
     check(vec, n);
-    //display(vec);
-    std::chrono::duration<double> timeDelta = end-start;
-    //std::cout << "Function took: " << std::chrono::duration<double, std::micro>(timeDelta).count() << " micro seconds" << std::endl;
-    std::cout << "Function took: " << std::chrono::duration<double, std::milli>(timeDelta).count() << " ms" << std::endl;
+    if(timeOut) {
+      std::cout << "TIME OUT" << std::endl;
+      // Check with previus success;
+      vec = prevN;
+    }
 
-    file << std::chrono::duration<double, std::milli>(timeDelta).count() << " ms: ";
-    file << "{" << n <<", {";
-    bool first = true;
-    for (auto num : vec) {
-      if(!first) {
-        file << ", ";
-      }
-      file << num;
-      first = false;
-    } 
-    file << "}},\n";
+    //display(vec);
+    std::chrono::duration<double, std::milli> timeDelta = end-start;
+    if(timeDelta.count() >= threshold) {
+      optimize(vec, firstErr, rules, n);
+      saveOptimizeMap(rules);
+      --i;
+    }
+    std::cout << "Function took: " << timeDelta.count() << " ms" << std::endl;
+    printToFile(file, timeDelta.count(), n, vec);
     file.close();
+    prevN = vec;
   } 
   timer::time_point testEnd = timer::now();
   std::chrono::duration<double> testDelta = testEnd-testStart;
@@ -89,12 +101,17 @@ int main(int argc, char** argv ) {
   return 0;
 }   
 
-std::vector<int> square_sums_row(int n) {
+std::vector<int> square_sums_row(int n, std::vector<int>& firstErr, bool& timeOut) {
+  timer::time_point start = timer::now();
+  double timeOut_treshold = 40000;
   bool first = true;
   if(n < 15) {
     return {};
   }
   
+  // === Get rules for the n ===
+  std::vector<std::pair<int, int>> rulesVec = rules[n];
+
   // ===  Vector of squared numbers === 
   int base = sqrt(n + (n - 1));
   std::vector<int> squareVec;
@@ -124,6 +141,9 @@ std::vector<int> square_sums_row(int n) {
   }
   // === Display complementary vector === 
   //displayComplementary(nodeMatrix);
+  if(n == 352) {
+    c_n = 324; 
+  }
 
   // === Finding result series ===
   nodeMatrix[c_n-1].idx = 0;
@@ -145,433 +165,19 @@ std::vector<int> square_sums_row(int n) {
           junctionPoint = true;
           junctionPoints.push_back(node.value);
         }
-        if((n==50) && ((c_n==41 && cmpN==8)||(c_n==14 && cmpN==2)||
-        (c_n==1 && cmpN==24))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==45) && ((c_n==40 && cmpN==9)||(c_n==11 && cmpN==5)||
-        (c_n==26 && cmpN==10))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==45 || n==71) && c_n==15 && cmpN==1) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==71 && c_n==50 && cmpN==14) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==71 && c_n==20 && cmpN==5) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==71 && c_n==11 && cmpN==25) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==71 && c_n==68 && cmpN==32) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==71 && c_n==32 && cmpN==4) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==71 && c_n==21 && cmpN==15) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==71 && c_n==1 && cmpN==3) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==94 && c_n==24 && cmpN==12) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==94 && c_n==74 && cmpN==7) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==94 && c_n==7 && cmpN==2) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==94 && c_n==2 && cmpN==14) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==94 && c_n==11 && cmpN==5) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==94 && c_n==15 && cmpN==10) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(n==94 && c_n==15 && cmpN==6) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==109) && ((c_n==87 && cmpN==82)||(c_n==52 && cmpN==29)||
-                     (c_n==20 && cmpN==5)||(c_n==5 && cmpN==11))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if(((n==96)||(n==95)) && ((c_n==49 && cmpN==51)||(c_n==26 && cmpN==38)||
-        (c_n==28 && cmpN==8)||(c_n==8 && cmpN==1)||
-        (c_n==1 && cmpN==3)||(c_n==3 && cmpN==6)||
-        (c_n==6 && cmpN==10))){
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==31) && ((c_n==16 && cmpN==9) || (c_n==22 && cmpN==3) || (c_n==3 && cmpN==6))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==38) && ((c_n==22 && cmpN==3) || (c_n==3 && cmpN==1) || (c_n==1 && cmpN==8) || (c_n==8 && cmpN==17))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==41) && ((c_n==40 && cmpN==9) || (c_n==7 && cmpN==2))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==44) && ((c_n==40 && cmpN==9)||(c_n==11 && cmpN==5))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==50) && ((c_n==9 && cmpN==16)||(c_n==7 && cmpN==18))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==100) && ((c_n==48 && cmpN==16)||(c_n==16 && cmpN==9)||
-        (c_n==9 && cmpN==27) ||(c_n==35 && cmpN==1)||
-        (c_n==1 && cmpN==15) ||(c_n==10 && cmpN==6))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==114) && ((c_n==24 && cmpN==1)||(c_n==5 && cmpN==20)||
-                     (c_n==16 && cmpN==9))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==113) && ((c_n==26 && cmpN==10)||(c_n==28 && cmpN==8))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==112) && ((c_n==47 && cmpN==2)||(c_n==23 && cmpN==13)||
-        (c_n==13 && cmpN==3)||(c_n==3 && cmpN==22)||
-        (c_n==29 && cmpN==7)||(c_n==9 && cmpN==16)||
-        (c_n==16 && cmpN==20))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==111) && ((c_n==4 && cmpN==21)||(c_n==21 && cmpN==15)||
-        (c_n==22 && cmpN==3)||(c_n==3 && cmpN==6))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==110) && ((c_n==56 && cmpN==8)||(c_n==8 && cmpN==1)||
-        (c_n==52 && cmpN==12)||(c_n==3 && cmpN==22)||
-        (c_n==11 && cmpN==5))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==108) && ((c_n==44 && cmpN==37)||(c_n==8 && cmpN==1)||
-        (c_n==11 && cmpN==5)||(c_n==17 && cmpN==19))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==105) && ((c_n==7 && cmpN==2)||(c_n==23 && cmpN==13)||
-        (c_n==38 && cmpN==11))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==115) && ((c_n==36 && cmpN==13)||(c_n==13 && cmpN==12)||
-        (c_n==39 && cmpN==25)||(c_n==8 && cmpN==1)||
-        (c_n==1 && cmpN==3)||(c_n==58 && cmpN==6))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==116) && ((c_n==47 && cmpN==2)||(c_n==21 && cmpN==28)||
-        (c_n==8 && cmpN==1)||(c_n==1 && cmpN==24)||
-        (c_n==24 && cmpN==25)||(c_n==9 && cmpN==16))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==117) && ((c_n==60 && cmpN==21)||(c_n==33 && cmpN==16)||
-        (c_n==7 && cmpN==2))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==118) && ((c_n==48 && cmpN==1)||(c_n==28 && cmpN==8)||
-        (c_n==10 && cmpN==6))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==119) && ((c_n==22 && cmpN==3)||(c_n==36 && cmpN==28)||
-        (c_n==28 && cmpN==8)||(c_n==1 && cmpN==15)||
-        (c_n==4 && cmpN==5)||(c_n==10 && cmpN==6))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==121) && ((c_n==7 && cmpN==2)||(c_n==2 && cmpN==23)||
-        (c_n==26 && cmpN==10)||(c_n==15 && cmpN==21)||
-        (c_n==21 && cmpN==4)||(c_n==4 && cmpN==5)||
-        (c_n==11 && cmpN==25)||(c_n==45 && cmpN==19)||
-        (c_n==30 && cmpN==6))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==129) && ((c_n==59 && cmpN==22)||(c_n==22 && cmpN==3)||
-        (c_n==43 && cmpN==3)||(c_n==43 && cmpN==6)||
-        (c_n==6 && cmpN==30)||(c_n==62 && cmpN==2)||
-        (c_n==2 && cmpN==14)||(c_n==58 && cmpN==42)||
-        (c_n==1 && cmpN==24)||(c_n==12 && cmpN==4))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==137) && ((c_n==29 && cmpN==20)||(c_n==20 && cmpN==5)||
-        (c_n==34 && cmpN==2)||(c_n==21 && cmpN==4)||
-        (c_n==4 && cmpN==12)||(c_n==13 && cmpN==36))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==139) && ((c_n==15 && cmpN==21)||(c_n==21 && cmpN==4)||
-                     (c_n==30 && cmpN==6)||(c_n==17 && cmpN==8)||
-                     (c_n==8 && cmpN==1)||(c_n==20 && cmpN==5)||
-                     (c_n==11 && cmpN==25))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==140) && ((c_n==116 && cmpN==80)||(c_n==51 && cmpN==30)||
-                     (c_n==30 && cmpN==19)||(c_n==19 && cmpN==6)||
-                     (c_n==34 && cmpN==2)||(c_n==4 && cmpN==21))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==138) && ((c_n==2 && cmpN==12))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==141) && ((c_n==38 && cmpN==26)||(c_n==55 && cmpN==9)||
-                     (c_n==78 && cmpN==22)||(c_n==14 && cmpN==11)||
-                     (c_n==10 && cmpN==6)||(c_n==6 && cmpN==30)||
-                     (c_n==30 && cmpN==19)||(c_n==4 && cmpN==5)||
-                     (c_n==1 && cmpN==8))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==142) && ((c_n==73 && cmpN==8)||(c_n==8 && cmpN==17)||
-                     (c_n==17 && cmpN==32)||(c_n==35 && cmpN==1)||
-                     (c_n==30 && cmpN==19)||(c_n==10 && cmpN==15)||
-                     (c_n==15 && cmpN==21)||(c_n==21 && cmpN==4)||
-                     (c_n==4 && cmpN==5)||(c_n==22 && cmpN==14)||
-                     (c_n==11 && cmpN==38))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==145) && ((c_n==111 && cmpN==114)||(c_n==39 && cmpN==25)||
-                     (c_n==40 && cmpN==9)||(c_n==20 && cmpN==5))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        } 
-        else if((n==336) && ((c_n==17 && cmpN==19)||(c_n==10 && cmpN==26))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==415) && ((c_n==79 && cmpN==21)||(c_n==15 && cmpN==1)||
-                     (c_n==1 && cmpN==8)||(c_n==48 && cmpN==16)||
-                     (c_n==61 && cmpN==20)||(c_n==20 && cmpN==5)||
-                     (c_n==5 && cmpN==4)||(c_n==10 && cmpN==26))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==936) && ((c_n==34 && cmpN==15)||(c_n==15 && cmpN==1)||
-                     (c_n==39 && cmpN==10)||(c_n==28 && cmpN==21)||
-                     (c_n==24 && cmpN==25)||(c_n==17 && cmpN==32))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==539) && ((c_n==34 && cmpN==2)||(c_n==23 && cmpN==58)||
-                     (c_n==4 && cmpN==21)||(c_n==21 && cmpN==15)||
-                     (c_n==5 && cmpN==11)||(c_n==31 && cmpN==18)||
-                     (c_n==3 && cmpN==1))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==540) && ((c_n==73 && cmpN==27)||(c_n==54 && cmpN==10)||
-                     (c_n==6 && cmpN==19)||(c_n ==4 && cmpN==12)||
-                     (c_n==12 && cmpN==24)||(c_n==25  && cmpN==11)||
-                     (c_n==484 && cmpN==477)||(c_n==11  && cmpN==5)||
-                     (c_n==33  && cmpN==3))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==540) && ((c_n==73 && cmpN==27)||(c_n==54 && cmpN==10)||
-                     (c_n==6 && cmpN==19)||(c_n ==4 && cmpN==12)||
-                     (c_n==12 && cmpN==24)||(c_n==25  && cmpN==11)||
-                     (c_n==484 && cmpN==477)||(c_n==11  && cmpN==5)||
-                     (c_n==33  && cmpN==3))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==750) && ((c_n==47 && cmpN==2)||(c_n==31 && cmpN==18)||(c_n==7 && cmpN==9))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==751) && ((c_n==30 && cmpN==6)||(c_n==6 && cmpN==10)||(c_n==23 && cmpN==2))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==752) && ((c_n==29 && cmpN==20)||(c_n==44 && cmpN==37)||(c_n==27 && cmpN==22)||
-                (c_n==22 && cmpN==3))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==753) && ((c_n==541 && cmpN==483))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==754) && ((c_n==690 && cmpN==606)||(c_n==541 && cmpN==483))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==755) && ((c_n==690 && cmpN==606)||(c_n==614 && cmpN==682)||
-        (c_n==689 && cmpN==680)||(c_n==541 && cmpN==483)||(c_n==5 && cmpN==11)||
-        (c_n==7 && cmpN==2)||(c_n==34 && cmpN==15))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==756) && ((c_n==58 && cmpN==42)||(c_n==42 && cmpN==22))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==757) && ((c_n==9 && cmpN==55)||(c_n==23 && cmpN==2)||(c_n==53 && cmpN==11)||
-        (c_n==11 && cmpN==5)||(c_n==5 && cmpN==4)||(c_n==4 && cmpN==12))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==759) && ((c_n==685 && cmpN==759)||(c_n==57 && cmpN==7)||(c_n==49 && cmpN==32)||
-        (c_n==17 && cmpN==19)||(c_n==19 && cmpN==6))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==575) && ((c_n==23 && cmpN==2)||(c_n==35 && cmpN==29)||(c_n==7 && cmpN==18))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==963) && ((c_n==38 && cmpN==11)||(c_n==11 && cmpN==5)||(c_n==5 && cmpN==4)||
-        (c_n==17 && cmpN==19))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==729) && ((c_n==20 && cmpN==16)||(c_n==4 && cmpN==5)||(c_n==54 && cmpN==10)||
-        (c_n==6 && cmpN==19))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==833) && ((c_n==27 && cmpN==54)||(c_n==39 && cmpN==25)||(c_n==53 && cmpN==28)||
-        (c_n==21 && cmpN==4)||(c_n==20 && cmpN==16))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==834) && ((c_n==766 && cmpN==678)||(c_n==687 && cmpN==682)||(c_n==535 && cmpN==489)||
-        (c_n==64 && cmpN==36)||(c_n==13 && cmpN==12))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==835) && ((c_n==766 && cmpN==678)||(c_n==72 && cmpN==9)||(c_n==52 && cmpN==12)||
-        (c_n==76 && cmpN==5))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==885) && ((c_n==69 && cmpN==12))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==451) && ((c_n==45 && cmpN==4)||(c_n==4 && cmpN==21))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else if((n==384) && ((c_n==48 && cmpN==33))) {
-          nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
-          nextNode = cmpN;
-          break;
-        }
-        else
+        bool found = false;
+        for (auto rule : rulesVec) {
+          if(c_n == rule.first && cmpN == rule.second) {
+              nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
+              nextNode = cmpN;
+              found = true;
+              break;
+          }
+        }
+        if(found) {
+          break;
+        }
+
         if(nodeMatrix[cmpN-1].compVec.size() < nextNodeSize) {
           nextNodeSize = nodeMatrix[cmpN-1].compVec.size();
           nextNode = cmpN;
@@ -590,6 +196,7 @@ std::vector<int> square_sums_row(int n) {
       if(junctionPoints.size() > 0) {
         #ifdef __DISPLAY__
           if(first) {
+            firstErr = resultSeries;
             display(resultSeries);
             first = false;
           }
@@ -611,10 +218,15 @@ std::vector<int> square_sums_row(int n) {
         return {};
       }
     }
+    timer::time_point midPoint = timer::now();
+    std::chrono::duration<double, std::milli> checkTimeOut = midPoint-start;
+    if(checkTimeOut.count() > timeOut_treshold) {
+      timeOut = true;
+      return {};
+    }
   }
   return resultSeries;
 }
-
 bool check(std::vector<int>& vec, int n) {
   // Test 1: Check the size of the vector
   if(vec.size() != n) {
@@ -656,14 +268,12 @@ bool check(std::vector<int>& vec, int n) {
   std::cout << n << " Passed" << std::endl;
   return true;
 }
-
 void display(std::vector<int>& vec) {
   for (auto num : vec) {
     std::cout << num << ", ";
   }
   std::cout << std::endl;
 }
-
 void displayComplementary(std::vector<Node>& compVec) {
   for(int idx = 0; idx < compVec.size(); ++idx) {
     std::cout << "[" << idx + 1 << "] <" << compVec.at(idx).compVec.size() << ">: ";
@@ -671,5 +281,97 @@ void displayComplementary(std::vector<Node>& compVec) {
       std::cout << compNum << ", ";
     }
     std::cout << std::endl;
+  }
+}
+void loadRules(std::unordered_map<int, std::vector<std::pair<int, int>>>& rules) {
+  std::fstream file;
+  file.open("Rules.txt", std::fstream::in);
+  if(file.is_open()) {
+    std::string line;
+    while(!file.eof()) {
+      std::getline(file, line);
+      if(!line.empty()) {
+        auto semi = line.find(',', 0);
+        int nvalue = std::atoi(line.substr(1,semi-1).data());
+        rules[nvalue] = {};
+        std::vector<std::pair<int, int>>& ruleVec = rules[nvalue];
+        int st = line.find('{', semi+2);
+        while(st != -1) {
+          auto semi = line.find(',', st);
+          auto end = line.find('}',st);
+          int prev = std::atoi(line.substr(st+1, semi-st-1).data());
+          int next = std::atoi(line.substr(semi+1, end-semi-1).data());
+          ruleVec.push_back({prev,next});
+          st = line.find('{', end+1);
+        };
+      }
+    }
+    file.close();
+    // for (auto item : rules) {
+    //   std::cout << "["<<item.first<<"]:";
+    //   for (auto p : item.second) {
+    //     std::cout << "{"<<p.first<<","<<p.second<<"},";
+    //   }
+    //   std::cout << std::endl;
+    // }
+  }
+  else {
+    std::cout << "FAILD" << std::endl;
+  }
+}
+void optimize(std::vector<int> vec, std::vector<int> err, std::unordered_map<int, std::vector<std::pair<int, int>>>& rules, int n) {
+  for(int idx = 0; idx < err.size(); ++idx) {
+    if(err[idx] != vec[idx]) {
+      if(rules.count(n) == 0) {
+        rules[n] = {};
+      }
+      std::vector<std::pair<int, int>>& ruleLine = rules[n];
+      ruleLine.push_back({vec[idx-1], vec[idx]});
+      break;
+    }
+  }
+}
+void saveOptimizeMap( std::unordered_map<int, std::vector<std::pair<int, int>>>& rules) {
+  std::fstream file;
+  file.open("Rules.txt", std::fstream::out | std::fstream::trunc);
+  if(file.is_open()) {
+    bool notFirstRow = false;
+    for(auto item : rules) {
+      if(item.second.size() != 0) {
+        if(notFirstRow) {
+          file << "\n";
+        }
+        file << "{" << item.first << ",{";
+        bool notFirstPair = false;
+        for(auto pair : item.second) {
+          if(notFirstPair) {
+            file << ",";
+          }
+          file << "{" << pair.first << "," << pair.second << "}";
+          notFirstPair = true;
+        }
+        file << "}},";
+        notFirstRow = true;
+      }
+    }
+  }
+  else {
+    std::cout << "Add to optimize map - file is not open" << std::endl;
+  }
+  file.close();
+}
+void printToFile(std::fstream& file, double time, int n, std::vector<int>& vec) {
+  if(file.is_open()) {
+    file << time << " ms: ";
+    file << "{" << n <<", {";
+    bool first = true;
+    for (auto num : vec) {
+      if(!first) {
+        file << ", ";
+      }
+      file << num;
+      first = false;
+    } 
+    file << "}},\n";
   }
 }
