@@ -105,7 +105,7 @@ std::vector<int> square_sums_row(int n, std::vector<int>& firstErr, bool& timeOu
   timer::time_point start = timer::now();
   double timeOut_treshold = 100000;
   bool first = true;
-  if(n < 15) {
+  if(n<15) {
     return {};
   }
   
@@ -141,10 +141,11 @@ std::vector<int> square_sums_row(int n, std::vector<int>& firstErr, bool& timeOu
   }
   // === Display complementary vector === 
   //displayComplementary(nodeMatrix);
-  if(n==352){c_n=324;}
-  if(n==391){c_n=338;}
-  if(n==574){c_n=450;}
-  
+  for (auto rule : rulesVec) {
+    if(rule.first == -1) {
+      c_n=rule.second;
+    }
+  }
 
   // === Finding result series ===
   nodeMatrix[c_n-1].idx = 0;
@@ -322,12 +323,18 @@ void loadRules(std::unordered_map<int, std::vector<std::pair<int, int>>>& rules)
 }
 void optimize(std::vector<int> vec, std::vector<int> err, std::unordered_map<int, std::vector<std::pair<int, int>>>& rules, int n) {
   for(int idx = 0; idx < err.size(); ++idx) {
-    if(idx != 0 && err[idx] != vec[idx]) {
+    if(err[idx] != vec[idx]) {
       if(rules.count(n) == 0) {
         rules[n] = {};
       }
       std::vector<std::pair<int, int>>& ruleLine = rules[n];
-      ruleLine.push_back({vec[idx-1], vec[idx]});
+      if(idx != 0) {
+        ruleLine.push_back({vec[idx-1], vec[idx]});
+      }
+      else {
+        ruleLine.push_back({-1, vec[idx]});
+      }
+      
       break;
     }
   }
