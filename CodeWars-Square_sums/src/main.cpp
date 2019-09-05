@@ -36,7 +36,7 @@
 #define __DISPLAY__
 using timer = std::chrono::steady_clock;
 std::unordered_map<int, std::vector<std::pair<int, int>>> rules = {};
-
+std::unordered_map<int, std::vector<std::pair<int, int>>> filtred = {};
 struct Node {
   int value = -1;
   int idx = -1;
@@ -49,8 +49,10 @@ std::vector<int> square_sums_row(int n, std::vector<int>& firstErr, bool& timeOu
 void display(std::vector<int>& vec);
 void displayComplementary(std::vector<Node>& compVec);
 void loadRules(std::unordered_map<int, std::vector<std::pair<int, int>>>& rules);
+void selectRules(std::unordered_map<int, std::vector<std::pair<int, int>>>& rules, std::unordered_map<int, std::vector<std::pair<int, int>>>& filtred);
 void optimize(std::vector<int> vec, std::vector<int> err, std::unordered_map<int, std::vector<std::pair<int, int>>>& rules, int n);
 void saveOptimizeMap( std::unordered_map<int, std::vector<std::pair<int, int>>>& rules);
+void saveRulesVector( std::unordered_map<int, std::vector<std::pair<int, int>>>& rules);
 void printToFile(std::fstream& file, double time, int n, std::vector<int>& vec);
 
 int main(int argc, char** argv ) {
@@ -60,43 +62,45 @@ int main(int argc, char** argv ) {
   for(int i = 2; i < 1001; ++i) {
     setOfN.push_back(i);
   }
-  double threshold = 130; // 100 ms;
+  double threshold = 80; // 100 ms;
   loadRules(rules);
-  std::fstream file;
-  std::vector<int> prevN = {};
-  timer::time_point testStart = timer::now();
-  //for(int n : setOfN) {
-  for (int i=0; i < setOfN.size(); ++i) {
-    int n = setOfN[i];
-    std::cout << "====== Test N(" << n << ") ======" << std::endl;
-    file.open("Out.txt", std::fstream::out | std::fstream::app);
-    std::vector<int> firstErr{};
-    bool timeOut = false;
-    timer::time_point start = timer::now();
-    std::vector<int> vec = square_sums_row(n, firstErr, timeOut);
-    timer::time_point end = timer::now();
-    check(vec, n);
-    if(timeOut) {
-      std::cout << "TIME OUT" << std::endl;
-      // Check with previus success;
-      vec = prevN;
-    }
+  //selectRules(rules, filtred);
+  saveRulesVector(rules);
+  // std::fstream file;
+  // std::vector<int> prevN = {};
+  // timer::time_point testStart = timer::now();
+  // //for(int n : setOfN) {
+  // for (int i=0; i < setOfN.size(); ++i) {
+  //   int n = setOfN[i];
+  //   std::cout << "====== Test N(" << n << ") ======" << std::endl;
+  //   file.open("Out.txt", std::fstream::out | std::fstream::app);
+  //   std::vector<int> firstErr{};
+  //   bool timeOut = false;
+  //   timer::time_point start = timer::now();
+  //   std::vector<int> vec = square_sums_row(n, firstErr, timeOut);
+  //   timer::time_point end = timer::now();
+  //   check(vec, n);
+  //   if(timeOut) {
+  //     std::cout << "TIME OUT" << std::endl;
+  //     // Check with previus success;
+  //     vec = prevN;
+  //   }
 
-    //display(vec);
-    std::chrono::duration<double, std::milli> timeDelta = end-start;
-    if(timeDelta.count() >= threshold) {
-      optimize(vec, firstErr, rules, n);
-      saveOptimizeMap(rules);
-      --i;
-    }
-    std::cout << "Function took: " << timeDelta.count() << " ms" << std::endl;
-    printToFile(file, timeDelta.count(), n, vec);
-    file.close();
-    prevN = vec;
-  } 
-  timer::time_point testEnd = timer::now();
-  std::chrono::duration<double> testDelta = testEnd-testStart;
-  std::cout << "==================" << std::endl << "Whole test took: " << (std::chrono::duration<double, std::milli>(testDelta).count() / 1000.0) << " s" << std::endl;
+  //   //display(vec);
+  //   std::chrono::duration<double, std::milli> timeDelta = end-start;
+  //   if(timeDelta.count() >= threshold) {
+  //     optimize(vec, firstErr, rules, n);
+  //     saveOptimizeMap(rules);
+  //     --i;
+  //   }
+  //   std::cout << "Function took: " << timeDelta.count() << " ms" << std::endl;
+  //   printToFile(file, timeDelta.count(), n, vec);
+  //   file.close();
+  //   prevN = vec;
+  // } 
+  // timer::time_point testEnd = timer::now();
+  // std::chrono::duration<double> testDelta = testEnd-testStart;
+  // std::cout << "==================" << std::endl << "Whole test took: " << (std::chrono::duration<double, std::milli>(testDelta).count() / 1000.0) << " s" << std::endl;
   
   return 0;
 }   
@@ -381,5 +385,51 @@ void printToFile(std::fstream& file, double time, int n, std::vector<int>& vec) 
       first = false;
     } 
     file << "}},\n";
+  }
+}
+
+void saveRulesVector( std::unordered_map<int, std::vector<std::pair<int, int>>>& rules) {
+  std::fstream file;
+  file.open("RulesVec.txt", std::fstream::out | std::fstream::trunc);
+  if(file.is_open()) {
+    for(int i=1; i < 1001; ++i) {
+      auto vec = rules[i];
+      if(i!=1) {
+          //file << "\n";
+      }
+      file << "{";
+      bool notFirstPair = false;
+      for(auto pair : vec) {
+        if(notFirstPair) {
+          file << ",";
+        }
+        //file << "{" << pair.first << "," << pair.second << "}";
+        file << pair.first << "," << pair.second;
+        notFirstPair = true;
+      }
+        file << "},";
+      }
+    }
+  else {
+    std::cout << "Add to optimize map - file is not open" << std::endl;
+  }
+  file.close();
+}
+
+void selectRules(std::unordered_map<int, std::vector<std::pair<int, int>>>& rules, std::unordered_map<int, std::vector<std::pair<int, int>>>& filtred) {
+  std::fstream file;
+  file.open("input.txt", std::fstream::in);
+  if(file.is_open()) {
+    std::string line;
+    while(!file.eof()) {
+      std::getline(file,line);
+      int number = std::atoi(line.data());
+      filtred[number] = rules[number];
+    }
+    file.close();
+    for(int i=1;i<146;++i) {
+      filtred[i] = rules[i];
+    }
+    saveRulesVector(filtred);
   }
 }
