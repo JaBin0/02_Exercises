@@ -65,42 +65,42 @@ int main(int argc, char** argv ) {
   double threshold = 80; // 100 ms;
   loadRules(rules);
   //selectRules(rules, filtred);
-  saveRulesVector(rules);
-  // std::fstream file;
-  // std::vector<int> prevN = {};
-  // timer::time_point testStart = timer::now();
-  // //for(int n : setOfN) {
-  // for (int i=0; i < setOfN.size(); ++i) {
-  //   int n = setOfN[i];
-  //   std::cout << "====== Test N(" << n << ") ======" << std::endl;
-  //   file.open("Out.txt", std::fstream::out | std::fstream::app);
-  //   std::vector<int> firstErr{};
-  //   bool timeOut = false;
-  //   timer::time_point start = timer::now();
-  //   std::vector<int> vec = square_sums_row(n, firstErr, timeOut);
-  //   timer::time_point end = timer::now();
-  //   check(vec, n);
-  //   if(timeOut) {
-  //     std::cout << "TIME OUT" << std::endl;
-  //     // Check with previus success;
-  //     vec = prevN;
-  //   }
-
-  //   //display(vec);
-  //   std::chrono::duration<double, std::milli> timeDelta = end-start;
-  //   if(timeDelta.count() >= threshold) {
-  //     optimize(vec, firstErr, rules, n);
-  //     saveOptimizeMap(rules);
-  //     --i;
-  //   }
-  //   std::cout << "Function took: " << timeDelta.count() << " ms" << std::endl;
-  //   printToFile(file, timeDelta.count(), n, vec);
-  //   file.close();
-  //   prevN = vec;
-  // } 
-  // timer::time_point testEnd = timer::now();
-  // std::chrono::duration<double> testDelta = testEnd-testStart;
-  // std::cout << "==================" << std::endl << "Whole test took: " << (std::chrono::duration<double, std::milli>(testDelta).count() / 1000.0) << " s" << std::endl;
+  //saveRulesVector(rules);
+  std::fstream file;
+  std::vector<int> prevN = {};
+  timer::time_point testStart = timer::now();
+  //for(int n : setOfN) {
+  for (int i=0; i < setOfN.size(); ++i) {
+    int n = setOfN[i];
+    std::cout << "====== Test N(" << n << ") ======" << std::endl;
+    file.open("Out.txt", std::fstream::out | std::fstream::app);
+    std::vector<int> firstErr{};
+    bool timeOut = false;
+    timer::time_point start = timer::now();
+    std::vector<int> vec = square_sums_row(n, firstErr, timeOut);
+    timer::time_point end = timer::now();
+    check(vec, n);
+    if(timeOut) {
+      std::cout << "TIME OUT" << std::endl;
+      // Check with previus success;
+      vec = prevN;
+    }
+  
+    //display(vec);
+    std::chrono::duration<double, std::milli> timeDelta = end-start;
+    if(timeDelta.count() >= threshold) {
+      optimize(vec, firstErr, rules, n);
+      saveOptimizeMap(rules);
+      --i;
+    }
+    std::cout << "Function took: " << timeDelta.count() << " ms" << std::endl;
+    printToFile(file, timeDelta.count(), n, vec);
+    file.close();
+    prevN = vec;
+  } 
+  timer::time_point testEnd = timer::now();
+  std::chrono::duration<double> testDelta = testEnd-testStart;
+  std::cout << "==================" << std::endl << "Whole test took: " << (std::chrono::duration<double, std::milli>(testDelta).count() / 1000.0) << " s" << std::endl;
   
   return 0;
 }   
